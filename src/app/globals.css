@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.swiper-button-prev {
+  /* Add your styles here */
+  color: red;
+  font-size: 20px;
+}
+
+.custom-next-btn {
+  /* Add your styles here */
+  color: red;
+  border-radius: 50%;
+}

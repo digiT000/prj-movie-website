@@ -1,0 +1,13 @@
+.sidebar {
+  display: grid;
+  grid-template-columns: 1fr; /* First column fits content, second takes the remaining space */
+  gap: 1rem;
+}
+
+@media only screen and (min-width: 768px) {
+  .sidebar {
+    display: grid;
+    grid-template-columns: auto 1fr; /* First column fits content, second takes the remaining space */
+    gap: 1rem;
+  }
+}
