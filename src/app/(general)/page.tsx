@@ -1,14 +1,13 @@
 import React from "react";
-import MovieCard from "@/components/MovieCard";
-import { movieData, trendingData } from "@/data/homepageDataDummy";
 import "../../styles/ItemList.css";
-import SliderItems from "@/components/SliderItems";
 import TrendingSection from "@/components/section/TrendingSection";
 import ItemsListSection from "@/components/section/ItemsListSection";
-
+import SearchBar from "@/components/SearchBar";
+import { SearchType } from "@/models/interface";
 export default function Home() {
   return (
     <section className="flex flex-col gap-10 w-full">
+      <SearchBar type={SearchType.movies} />
       <TrendingSection />
       <ItemsListSection />
     </section>
