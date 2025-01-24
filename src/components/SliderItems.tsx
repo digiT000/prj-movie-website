@@ -14,6 +14,7 @@ export default function SliderItems({ items }: ItemList) {
   return (
     <div className="w-full">
       <Swiper
+        autoHeight
         slidesPerView={"auto"}
         spaceBetween={32}
         className="mySwiper"
@@ -22,7 +23,7 @@ export default function SliderItems({ items }: ItemList) {
       >
         {items.map((movie, key: number) => {
           return (
-            <SwiperSlide className="!w-fit" key={key}>
+            <SwiperSlide className="!w-fit !h-fit" key={key}>
               <MovieCard cardType="carousel" movie={movie} />
             </SwiperSlide>
           );

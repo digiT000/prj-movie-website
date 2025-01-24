@@ -19,7 +19,7 @@ export default function MovieCard({ cardType, movie }: MovieCardProps) {
 
   const movieTypeRender = () => {
     switch (movie.movieType) {
-      case "film":
+      case "movie":
         return (
           <div className="flex items-center gap-1">
             <Film size={12} /> Movie
@@ -73,9 +73,9 @@ export default function MovieCard({ cardType, movie }: MovieCardProps) {
       );
     case "carousel":
       return (
-        <div className="flex flex-col gap-2 w-[470px]">
+        <div className="flex flex-col gap-2 w-[470px] min-h-[270px]">
           {/* Poster Image */}
-          <div className="relative">
+          <div className="relative h-full">
             <Link href={`/movies/${movie.id}`} className="block">
               <Image
                 alt={movie.title}
