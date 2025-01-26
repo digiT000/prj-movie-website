@@ -1,7 +1,8 @@
 "use client";
 import ContentFetch from "@/api/content";
 import { MovieProps, SearchType } from "@/models/interface";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface SearcingProviderProps {
@@ -11,10 +12,12 @@ interface SearcingProviderProps {
 interface SearchingProps {
   searchString: string;
   searchType: SearchType;
+  page: number;
 }
 
 export interface SearchResult {
   totalResults: number;
+  totalPages: number;
   movies: MovieProps[];
 }
 
@@ -52,37 +55,43 @@ export const useSearchingContext = () => {
 };
 
 export function SearchingProvider({ children }: SearcingProviderProps) {
+  const searchParams = useSearchParams();
+
   const contentFetch = new ContentFetch();
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<SearchingProps>({
     searchString: "",
     searchType: SearchType.movies, // Default search type
+    page: 1,
   });
 
-  const {
-    data: searchResult,
-    isFetching: isLoadingSearching,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["search", searchTerm.searchString, searchTerm.searchType],
+  const { data: searchResult, isFetching: isLoadingSearching } = useQuery({
+    queryKey: [
+      "search",
+      searchTerm.searchString,
+      searchTerm.searchType,
+      searchTerm.page,
+    ],
     queryFn: () =>
       searchingData({
         searchString: searchTerm.searchString,
         searchType: searchTerm.searchType,
+        page: searchTerm.page,
       }),
     enabled: searchTerm.searchString.trim() !== "",
     staleTime: 1000 * 60 * 2,
+    placeholderData: keepPreviousData,
   });
 
   // The function to fetch data (simulate API call or use real API)
   const searchingData = async ({
     searchString,
     searchType,
+    page,
   }: SearchingProps): Promise<SearchResult> => {
     switch (searchType) {
       case SearchType.all:
-        return await contentFetch.searchAll(searchString);
+        return await contentFetch.searchAll(searchString, page);
       // case SearchType.movies:
       //   return { totalResults: 0, movies: [] };
       // case SearchType.tv:
@@ -92,7 +101,7 @@ export function SearchingProvider({ children }: SearcingProviderProps) {
       //   return { totalResults: 0, movies: [] };
 
       default:
-        throw new Error("Unknown search type");
+        return { totalResults: 0, movies: [], totalPages: 0 };
     }
   };
 

@@ -85,16 +85,17 @@ class ContentFetch {
         (result: any) =>
           result.media_type === "movie" || result.media_type === "tv"
       );
-      const totalPages = Math.ceil(response.data.total_results / 20);
+      const totalPages = response.data.total_pages;
       const totalResults: number = response.data.total_results;
       const movies = mappedResponse(movieData);
+      console.log(totalPages, totalResults, movies);
 
       // return { totalPages, movies, totalResults };
-      return { totalResults, movies };
+      return { totalResults, movies, totalPages };
     } catch (error) {
       console.error("Error fetching trending movies:", error);
       // return { totalPages: 1, movies: [], totalResults: 0 }; // Return empty array on error
-      return { totalResults: 0, movies: [] };
+      return { totalPages: 1, totalResults: 0, movies: [] };
     }
   }
 }

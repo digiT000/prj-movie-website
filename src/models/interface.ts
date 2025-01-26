@@ -14,5 +14,6 @@ export interface MovieProps {
 }
 
 export interface SearchBarProps {
+  searchString?: string;
   type: SearchType;
 }

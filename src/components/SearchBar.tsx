@@ -5,13 +5,11 @@ import { useSearchingContext } from "@/context/Searching";
 import { SearchBarProps } from "@/models/interface";
 import { useRouter } from "next/navigation";
 
-export default function SearchBar({ type }: SearchBarProps) {
+export default function SearchBar({ searchString, type }: SearchBarProps) {
   const router = useRouter();
 
   const { setSearchTerm, setIsSearching, searchTerm } = useSearchingContext();
-  const [inputSearch, setInputSearch] = useState<string>(
-    searchTerm.searchString || ""
-  );
+  const [inputSearch, setInputSearch] = useState<string>(searchString || "");
 
   const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -19,11 +17,12 @@ export default function SearchBar({ type }: SearchBarProps) {
     setSearchTerm({
       searchString: inputSearch,
       searchType: type,
+      page: 1,
     });
 
     // Delay navigation until router is ready
     if (router) {
-      router.push(`/search?q=${inputSearch}&type=${type}`);
+      router.push(`/search?q=${inputSearch}&type=${type}&page=${1}`);
     } else {
       console.error("Router is not ready");
     }

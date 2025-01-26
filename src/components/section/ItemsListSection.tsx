@@ -29,8 +29,6 @@ export default function ItemsListSection() {
     router.replace(`?${newSearchParams.toString()}`);
   }
 
-  console.log(page);
-
   if (isPending) {
     return <span>Loading...</span>;
   }
