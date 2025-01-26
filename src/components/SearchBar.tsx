@@ -3,18 +3,32 @@ import React, { useState } from "react";
 import { Search } from "lucide-react";
 import { useSearchingContext } from "@/context/Searching";
 import { SearchBarProps } from "@/models/interface";
+import { useRouter } from "next/navigation";
 
 export default function SearchBar({ type }: SearchBarProps) {
-  const [inputSearch, setInputSearch] = useState<string>("");
-  const { setSearchTerm, searchingData } = useSearchingContext();
+  const router = useRouter();
+
+  const { setSearchTerm, setIsSearching, searchTerm } = useSearchingContext();
+  const [inputSearch, setInputSearch] = useState<string>(
+    searchTerm.searchString || ""
+  );
 
   const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSearching(true);
     setSearchTerm({
       searchString: inputSearch,
       searchType: type,
-    }); // Set the search term
+    });
+
+    // Delay navigation until router is ready
+    if (router) {
+      router.push(`/search?q=${inputSearch}&type=${type}`);
+    } else {
+      console.error("Router is not ready");
+    }
   };
+
   return (
     <form onSubmit={handleSearch} className="-mb-5 flex items-center gap-2">
       <Search />

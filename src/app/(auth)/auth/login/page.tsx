@@ -6,7 +6,6 @@ import Link from "next/link";
 import InputField from "@/components/InputField";
 import Image from "next/image";
 import { NavMaps } from "@/utils/navigation";
-import SliderItems from "@/components/SliderItems";
 
 interface LoginFormProps {
   email: string;

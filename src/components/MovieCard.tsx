@@ -48,7 +48,7 @@ export default function MovieCard({ cardType, movie }: MovieCardProps) {
                 src={movie.poster}
                 width={500}
                 height={500}
-                className="aspect-3/2 object-cover rounded-lg min-h-[180px] "
+                className="aspect-3/2 object-cover rounded-lg min-h-[180px] max-h-[230px] "
               />
             </Link>
             {loading ? (
@@ -82,7 +82,7 @@ export default function MovieCard({ cardType, movie }: MovieCardProps) {
                 src={movie.poster}
                 width={500}
                 height={500}
-                className="aspect-3/2 object-cover rounded-lg min-h-[180px] "
+                className="aspect-3/2 object-cover rounded-lg min-h-[180px] max-h-[230px] "
               />
             </Link>
             {loading ? (

@@ -1,4 +1,5 @@
 "use client";
+import ContentFetch from "@/api/content";
 import { MovieProps, SearchType } from "@/models/interface";
 import { useQuery } from "@tanstack/react-query";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -12,14 +13,20 @@ interface SearchingProps {
   searchType: SearchType;
 }
 
+export interface SearchResult {
+  totalResults: number;
+  movies: MovieProps[];
+}
+
 interface SearchingContextType {
   searchTerm: SearchingProps;
-  searchResult: MovieProps[] | undefined;
+  searchResult: SearchResult | undefined;
   setSearchTerm: (searchTerm: SearchingProps) => void;
   searchingData: ({
     searchString,
     searchType,
-  }: SearchingProps) => Promise<MovieProps[]>;
+  }: SearchingProps) => Promise<SearchResult>;
+  setIsSearching: (isSearching: boolean) => void;
   isSearching: boolean;
   isLoadingSearching: boolean;
 }
@@ -45,6 +52,8 @@ export const useSearchingContext = () => {
 };
 
 export function SearchingProvider({ children }: SearcingProviderProps) {
+  const contentFetch = new ContentFetch();
+  const [isSearching, setIsSearching] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<SearchingProps>({
     searchString: "",
     searchType: SearchType.movies, // Default search type
@@ -52,7 +61,7 @@ export function SearchingProvider({ children }: SearcingProviderProps) {
 
   const {
     data: searchResult,
-    isFetching: isSearching,
+    isFetching: isLoadingSearching,
     isError,
     error,
   } = useQuery({
@@ -70,48 +79,31 @@ export function SearchingProvider({ children }: SearcingProviderProps) {
   const searchingData = async ({
     searchString,
     searchType,
-  }: SearchingProps): Promise<MovieProps[]> => {
-    // Simulate a delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    console.log(`Searching for ${searchType}: ${searchString}`);
-
-    // Example logic for handling different search types (replace with API calls)
+  }: SearchingProps): Promise<SearchResult> => {
     switch (searchType) {
-      case SearchType.movies:
-        return mockSearchMovies(searchString); // Replace with actual API call
-      case SearchType.tv:
-        return mockSearchTV(searchString); // Replace with actual API call
-      case SearchType.bookmarks:
-        return mockSearchBookmarks(searchString); // Replace with actual API call
+      case SearchType.all:
+        return await contentFetch.searchAll(searchString);
+      // case SearchType.movies:
+      //   return { totalResults: 0, movies: [] };
+      // case SearchType.tv:
+      //   return { totalResults: 0, movies: [] };
+
+      // case SearchType.bookmarks:
+      //   return { totalResults: 0, movies: [] };
+
       default:
         throw new Error("Unknown search type");
     }
   };
 
-  // Mock functions for search (replace with real API calls)
-  const mockSearchMovies = (searchString: string): MovieProps[] => {
-    console.log(`Mock searching movies with: ${searchString}`);
-    return []; // Replace with mock data or API result
-  };
-
-  const mockSearchTV = (searchString: string): MovieProps[] => {
-    console.log(`Mock searching TV with: ${searchString}`);
-    return []; // Replace with mock data or API result
-  };
-
-  const mockSearchBookmarks = (searchString: string): MovieProps[] => {
-    console.log(`Mock searching bookmarks with: ${searchString}`);
-    return []; // Replace with mock data or API result
-  };
-
   const value: SearchingContextType = {
     searchTerm,
     setSearchTerm,
-    isSearching,
+    isLoadingSearching, // Updated to renamed state
     searchingData,
     searchResult,
-    isLoadingSearching: isSearching,
+    isSearching,
+    setIsSearching,
   };
 
   return (
