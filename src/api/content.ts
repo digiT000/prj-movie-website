@@ -1,15 +1,9 @@
 import { SearchResult } from "@/context/Searching";
-import { MovieProps } from "@/models/interface";
+import { MovieProps, ReturnPagination } from "@/models/interface";
 import axios, { AxiosError } from "axios";
 
 const API_KEY = process.env.NEXT_PUBLIC_API_MOVIE_KEY;
 axios.defaults.baseURL = "https://api.themoviedb.org/3";
-
-interface ReturnPagination {
-  totalPages: number;
-  movies: MovieProps[];
-  totalResults: number;
-}
 
 const headers = {
   accept: "application/json",
@@ -69,6 +63,44 @@ class ContentFetch {
     }
   }
 
+  async fetchMovies(page: number = 1): Promise<ReturnPagination> {
+    const params = { language: "en-US", page: page };
+    try {
+      const response = await axios.get(`/movie/top_rated`, {
+        params: params,
+        headers: headers,
+      });
+      const movieData = response.data.results;
+      const totalPages = response.data.total_pages;
+      const totalResults = response.data.total_results;
+      const movies = mappedResponse(movieData);
+
+      return { totalPages, movies, totalResults };
+    } catch (error: any) {
+      console.error("Error fetching trending movies:", error);
+      return { totalPages: 1, movies: [], totalResults: 0 }; // Return empty array on error
+    }
+  }
+
+  async fetchTvShow(page: number = 1): Promise<ReturnPagination> {
+    const params = { language: "en-US", page: page };
+    try {
+      const response = await axios.get(`/tv/top_rated`, {
+        params: params,
+        headers: headers,
+      });
+      const movieData = response.data.results;
+      const totalPages = response.data.total_pages;
+      const totalResults = response.data.total_results;
+      const movies = mappedResponse(movieData);
+
+      return { totalPages, movies, totalResults };
+    } catch (error: any) {
+      console.error("Error fetching trending movies:", error);
+      return { totalPages: 1, movies: [], totalResults: 0 }; // Return empty array on error
+    }
+  }
+
   async searchAll(query: string, page: number = 1): Promise<SearchResult> {
     const params = {
       language: "en-US",
@@ -88,7 +120,6 @@ class ContentFetch {
       const totalPages = response.data.total_pages;
       const totalResults: number = response.data.total_results;
       const movies = mappedResponse(movieData);
-      console.log(totalPages, totalResults, movies);
 
       // return { totalPages, movies, totalResults };
       return { totalResults, movies, totalPages };
@@ -96,6 +127,61 @@ class ContentFetch {
       console.error("Error fetching trending movies:", error);
       // return { totalPages: 1, movies: [], totalResults: 0 }; // Return empty array on error
       return { totalPages: 1, totalResults: 0, movies: [] };
+    }
+  }
+
+  async searchMovies(
+    query: string,
+    page: number = 1
+  ): Promise<ReturnPagination> {
+    const params = {
+      language: "en-US",
+      query: query,
+      page: page,
+      include_adult: "false",
+    };
+    try {
+      const response = await axios.get(`/search/movie`, {
+        params: params,
+        headers: headers,
+      });
+      const movieData = response.data.results;
+      const totalPages = response.data.total_pages;
+
+      const totalResults = response.data.total_results;
+      const movies = mappedResponse(movieData);
+
+      return { totalPages, movies, totalResults };
+    } catch (error: any) {
+      console.error("Error fetching trending movies:", error);
+      return { totalPages: 1, movies: [], totalResults: 0 }; // Return empty array on error
+    }
+  }
+  async searchTvShow(
+    query: string,
+    page: number = 1
+  ): Promise<ReturnPagination> {
+    const params = {
+      language: "en-US",
+      query: query,
+      page: page,
+      include_adult: "false",
+    };
+    try {
+      const response = await axios.get(`/search/tv`, {
+        params: params,
+        headers: headers,
+      });
+      const movieData = response.data.results;
+      const totalPages = response.data.total_pages;
+
+      const totalResults = response.data.total_results;
+      const movies = mappedResponse(movieData);
+
+      return { totalPages, movies, totalResults };
+    } catch (error: any) {
+      console.error("Error fetching trending movies:", error);
+      return { totalPages: 1, movies: [], totalResults: 0 }; // Return empty array on error
     }
   }
 }

@@ -65,7 +65,7 @@ export function SearchingProvider({ children }: SearcingProviderProps) {
     page: 1,
   });
 
-  const { data: searchResult, isFetching: isLoadingSearching } = useQuery({
+  const { data: searchResult, isPending: isLoadingSearching } = useQuery({
     queryKey: [
       "search",
       searchTerm.searchString,
@@ -92,10 +92,10 @@ export function SearchingProvider({ children }: SearcingProviderProps) {
     switch (searchType) {
       case SearchType.all:
         return await contentFetch.searchAll(searchString, page);
-      // case SearchType.movies:
-      //   return { totalResults: 0, movies: [] };
-      // case SearchType.tv:
-      //   return { totalResults: 0, movies: [] };
+      case SearchType.movies:
+        return await contentFetch.searchMovies(searchString, page);
+      case SearchType.tv:
+        return await contentFetch.searchTvShow(searchString, page);
 
       // case SearchType.bookmarks:
       //   return { totalResults: 0, movies: [] };

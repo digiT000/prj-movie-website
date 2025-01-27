@@ -2,25 +2,33 @@
 import React, { useState } from "react";
 import SectionWrapper from "./SectionWrapper";
 import MovieCard from "../MovieCard";
-import ContentFetch from "@/api/content";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { MovieProps } from "@/models/interface";
+import { MovieProps, ReturnPagination, SearchType } from "@/models/interface";
 import Pagination from "../Pagination";
 import { useSearchParams, useRouter } from "next/navigation";
+import "../../styles/ItemList.css";
 
-export default function ItemsListSection() {
+interface ItemListProps {
+  headers: string;
+  fetchingData: (page: number) => Promise<ReturnPagination>;
+  type: SearchType;
+}
+
+export default function ItemsListSection({
+  headers,
+  fetchingData,
+  type,
+}: ItemListProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const page = searchParams.get("page");
 
-  const contentFetch = new ContentFetch();
   const [currentPage, setCurrentPage] = useState<number>(Number(page) || 1);
-  const { isPending, isError, data, error, isFetching, isPlaceholderData } =
-    useQuery({
-      queryKey: ["POPULAR", currentPage],
-      queryFn: () => contentFetch.fetchPopular(currentPage),
-      placeholderData: keepPreviousData,
-    });
+  const { isPending, isError, data, error, isFetching } = useQuery({
+    queryKey: [type, currentPage],
+    queryFn: () => fetchingData(currentPage),
+    placeholderData: keepPreviousData,
+  });
 
   function handlePagination(page: number) {
     setCurrentPage(page);
@@ -39,7 +47,7 @@ export default function ItemsListSection() {
 
   return (
     <SectionWrapper>
-      <h1 className="text-heading-L font-light">Recommended for you</h1>
+      <h1 className="text-heading-L font-light">{headers}</h1>
       <div className="items-grid">
         {isFetching ? (
           <span> Loading...</span>

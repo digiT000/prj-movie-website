@@ -52,13 +52,9 @@ export function WatchListProvider({ children }: WatchlistProviderProps) {
   }, []);
 
   const addToWachList = (movie: MovieProps) => {
-    console.log("click");
-
-    console.log(movie);
     setWatchList((prev) => [...prev, movie]);
   };
   const removeFromWatchList = (movieId: number) => {
-    console.log("click");
     setWatchList((prev) => prev.filter((movie) => movie.id !== movieId));
   };
 

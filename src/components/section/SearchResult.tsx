@@ -1,15 +1,12 @@
 "use client";
-
-import React, { useEffect, useState } from "react";
+import "../../styles/ItemList.css";
+import React from "react";
 import SectionWrapper from "./SectionWrapper";
 import { useSearchingContext } from "@/context/Searching";
 import MovieCard from "../MovieCard";
 import { MovieProps } from "@/models/interface";
-import { useSearchParams } from "next/navigation";
 import Pagination from "../Pagination";
 import { useRouter } from "next/navigation";
-import ContentFetch from "@/api/content";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 export default function SearchResult() {
   const router = useRouter();
@@ -17,8 +14,6 @@ export default function SearchResult() {
     useSearchingContext();
 
   function handlePagination(page: number) {
-    console.log(page);
-
     // Update the searchTerm with the new page value
     setSearchTerm({
       page,
@@ -28,6 +23,10 @@ export default function SearchResult() {
     const currentSearchParams = new URLSearchParams(window.location.search);
     currentSearchParams.set("page", String(page));
     router.replace(`?${currentSearchParams.toString()}`);
+  }
+
+  if (isLoadingSearching) {
+    return <span>Loading...</span>;
   }
 
   return (
@@ -49,8 +48,8 @@ export default function SearchResult() {
         className="w-full flex justify-center"
         currentPage={searchTerm.page}
         onPageChange={(page) => handlePagination(page)}
-        pageSize={(searchResult?.totalPages as number) || 1}
-        totalCount={(searchResult?.totalResults as number) || 1}
+        pageSize={searchResult?.totalPages as number}
+        totalCount={searchResult?.totalResults as number}
       />
     </SectionWrapper>
   );

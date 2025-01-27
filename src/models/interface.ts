@@ -17,3 +17,8 @@ export interface SearchBarProps {
   searchString?: string;
   type: SearchType;
 }
+export interface ReturnPagination {
+  totalPages: number;
+  movies: MovieProps[];
+  totalResults: number;
+}
