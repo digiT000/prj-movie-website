@@ -3,7 +3,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import SectionWrapper from "./SectionWrapper";
 import SliderItems from "../SliderItems";
-import ContentFetch from "@/api/content";
+import ContentFetch from "@/utils/content";
 
 export default function TrendingSection() {
   const contentFetch = new ContentFetch();

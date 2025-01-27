@@ -1,5 +1,5 @@
 "use client";
-import ContentFetch from "@/api/content";
+import ContentFetch from "@/utils/content";
 import SearchBar from "@/components/SearchBar";
 import ItemsListSection from "@/components/section/ItemsListSection";
 import { SearchType } from "@/models/interface";

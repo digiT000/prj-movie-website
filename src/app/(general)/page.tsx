@@ -4,7 +4,7 @@ import TrendingSection from "@/components/section/TrendingSection";
 import ItemsListSection from "@/components/section/ItemsListSection";
 import SearchBar from "@/components/SearchBar";
 import { SearchType } from "@/models/interface";
-import ContentFetch from "@/api/content";
+import ContentFetch from "@/utils/content";
 export default function Home() {
   const contentFetch = new ContentFetch();
 

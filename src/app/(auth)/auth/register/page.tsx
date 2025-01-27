@@ -1,4 +1,5 @@
 "use client";
+import { createNewUser } from "@/utils/auth.api";
 import Alert from "@/components/Alert";
 import Button from "@/components/Button";
 import InputField from "@/components/InputField";
@@ -8,6 +9,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 interface RegisterFormProps {
+  name: string;
   email: string;
   password: string;
   repeatPassword: string;
@@ -17,6 +19,7 @@ export default function Register() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [registerForm, setRegisterForm] = useState<RegisterFormProps>({
+    name: "",
     email: "",
     password: "",
     repeatPassword: "",
@@ -29,30 +32,30 @@ export default function Register() {
     setError(null);
   }
 
-  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
+  async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (registerForm.password !== registerForm.repeatPassword) {
       setError("Passwords do not match");
       return;
     }
 
+    const createUser = await createNewUser(registerForm);
+    if (!createUser.success) {
+      setError(createUser.error);
+      setLoading(false);
+      setBtnDisable(false);
+      return;
+    }
+    console.log("succeess");
+
     setLoading(true);
     setBtnDisable(true);
-    // setTimeout(() => {
-    //   setError(null);
-    //   const user = dummyUsers.find((u) => u.email === loginForm.email);
-    //   if (user && user.password === loginForm.password) {
-    //     setLoading(false);
-    //   } else {
-    //     setError("Invalid email or password");
-    //     setLoading(false);
-    //   }
-    // }, 3000);
   }
 
   useEffect(() => {
     setBtnDisable(
-      registerForm.email === "" ||
+      registerForm.name === "" ||
+        registerForm.email === "" ||
         registerForm.password === "" ||
         registerForm.repeatPassword === ""
     );
@@ -75,8 +78,16 @@ export default function Register() {
         <div className="flex flex-col gap-10">
           <h1 className="text-heading-L">Sign Up</h1>
 
-          <form onSubmit={handleLogin} className="flex flex-col gap-6">
+          <form onSubmit={handleRegister} className="flex flex-col gap-6">
             {error ? <Alert type="error" message={error as string} /> : null}
+            <InputField
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Enter your name"
+              value={registerForm.name}
+              onChange={(e) => handleChangeForm(e)}
+            />
 
             <InputField
               type="email"

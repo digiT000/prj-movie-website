@@ -1,5 +1,5 @@
 "use client";
-import ContentFetch from "@/api/content";
+import ContentFetch from "@/utils/content";
 import { MovieProps, SearchType } from "@/models/interface";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
