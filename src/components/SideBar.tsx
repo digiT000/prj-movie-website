@@ -6,8 +6,10 @@ import { CircleChevronLeft } from "lucide-react";
 import { navLinks } from "@/utils/navigation";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function SideBar() {
+  const { data, status } = useSession();
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const currentPath = usePathname();
@@ -16,6 +18,7 @@ export default function SideBar() {
     setIsOpen(!isOpen);
   }
 
+  function renderAction() {}
   return (
     <aside className="hidden md:inline-block p-5">
       <motion.div
@@ -89,27 +92,32 @@ export default function SideBar() {
             })}
           </nav>
         </div>
-
+        {status === "loading" ? (
+          <div className="w-full h-10 rounded-full bg-dark_blue animate-pulse"></div>
+        ) : (
+          <div className="flex gap-3 items-center">
+            <Image
+              src={data?.user?.image || "/dummyProfile.jpeg"}
+              alt="profile image"
+              width={100}
+              height={100}
+              className="w-10 h-10 rounded-full object-cover"
+            />
+            <motion.span
+              initial={{ opacity: 0, width: 0 }}
+              animate={
+                isOpen
+                  ? { opacity: 1, width: "auto" }
+                  : { opacity: 0, width: 0 }
+              }
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="overflow-hidden text-body-S line-clamp-2"
+            >
+              {data?.user?.name}
+            </motion.span>
+          </div>
+        )}
         {/* Profile Image */}
-        <div className="flex gap-3 items-center">
-          <Image
-            src={"/dummyProfile.jpg"}
-            alt="profile image"
-            width={100}
-            height={100}
-            className="w-10 h-10 rounded-full object-cover"
-          />
-          <motion.span
-            initial={{ opacity: 0, width: 0 }}
-            animate={
-              isOpen ? { opacity: 1, width: "auto" } : { opacity: 0, width: 0 }
-            }
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="overflow-hidden text-body-S line-clamp-2"
-          >
-            Farel Darari Deksano
-          </motion.span>
-        </div>
       </motion.div>
     </aside>
   );

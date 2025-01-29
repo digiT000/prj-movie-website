@@ -7,6 +7,7 @@ import InputField from "@/components/InputField";
 import Image from "next/image";
 import { NavMaps } from "@/utils/navigation";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface LoginFormProps {
   email: string;
@@ -19,6 +20,7 @@ const dummyUsers = [
 ];
 
 export default function Login() {
+  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [loginForm, setLoginForm] = useState<LoginFormProps>({
@@ -35,7 +37,6 @@ export default function Login() {
 
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
     setLoading(true);
     setBtnDisable(true);
 
@@ -44,17 +45,16 @@ export default function Login() {
       password: loginForm.password, // Matches the `password` key
       redirect: false, // Optional, to handle redirects yourself
     });
-
+    console.log(res);
     if (res?.ok) {
       // toast success
-      console.log("success");
+      router.push("/");
       return;
     } else {
       // Toast failed
-      setError("Failed! Check you input and try again.");
+      setError("Invalid email or password");
       return;
     }
-    return res;
   }
 
   useEffect(() => {

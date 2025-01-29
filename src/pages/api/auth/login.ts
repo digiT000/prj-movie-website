@@ -20,7 +20,6 @@ export default async function handler(
 
     try {
       const response = await handeLoginUser(email, password);
-      console.log("API RESPONSE", response);
       if (response.success) {
         return res.status(200).json(response?.user);
       } else {

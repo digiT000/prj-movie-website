@@ -8,6 +8,8 @@ import { prisma } from "@/utils/prisma";
 import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
 
+const BASE_URL = process.env.NEXT_PUBLIC_NEXT_AUTH_URL;
+
 export const options: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -30,14 +32,11 @@ export const options: NextAuthOptions = {
         };
 
         try {
-          const res = await axios.post(
-            `${process.env.NEXTAUTH_URL}/api/auth/login`,
-            userCredentials,
-            {
-              headers: { "Content-Type": "application/json" },
-              // validateStatus: (status) => status < 500,
-            }
-          );
+          const url = `${BASE_URL}/api/auth/login`;
+          console.log("URL for login:", url); // Check if the URL is correct
+          const res = await axios.post(url, userCredentials, {
+            headers: { "Content-Type": "application/json" },
+          });
 
           console.log("RESSSSPONSE", res);
 
@@ -61,13 +60,16 @@ export const options: NextAuthOptions = {
   jwt: {
     maxAge: 60 * 60 * 24 * 30,
   },
-  // pages: {
-  //   signIn: "/auth/login",
-  //   signOut: "/auth/login",
-  //   error: "/auth/login",
-  // },
+  pages: {
+    signIn: "/auth/login",
+    signOut: "/",
+    error: "/auth/login",
+  },
   callbacks: {
     async session({ session, token }: { session: Session; token: JWT }) {
+      console.log("SESSION", session);
+      console.log("TOKEN", token);
+
       if (token) {
         session.user = {
           email: token.email,
