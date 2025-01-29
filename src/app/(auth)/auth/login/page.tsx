@@ -6,6 +6,7 @@ import Link from "next/link";
 import InputField from "@/components/InputField";
 import Image from "next/image";
 import { NavMaps } from "@/utils/navigation";
+import { signIn } from "next-auth/react";
 
 interface LoginFormProps {
   email: string;
@@ -37,16 +38,23 @@ export default function Login() {
 
     setLoading(true);
     setBtnDisable(true);
-    setTimeout(() => {
-      setError(null);
-      const user = dummyUsers.find((u) => u.email === loginForm.email);
-      if (user && user.password === loginForm.password) {
-        setLoading(false);
-      } else {
-        setError("Invalid email or password");
-        setLoading(false);
-      }
-    }, 3000);
+
+    let res = await signIn("credentials", {
+      email: loginForm.email, // Matches the `email` key
+      password: loginForm.password, // Matches the `password` key
+      redirect: false, // Optional, to handle redirects yourself
+    });
+
+    if (res?.ok) {
+      // toast success
+      console.log("success");
+      return;
+    } else {
+      // Toast failed
+      setError("Failed! Check you input and try again.");
+      return;
+    }
+    return res;
   }
 
   useEffect(() => {
@@ -81,7 +89,7 @@ export default function Login() {
             <InputField
               type="email"
               id="email"
-              name="email"
+              name="email" // Matches the `email` key in `credentials`
               placeholder="Email Address"
               value={loginForm.email}
               onChange={(e) => handleChangeForm(e)}
@@ -89,7 +97,7 @@ export default function Login() {
             <InputField
               type="password"
               id="password"
-              name="password"
+              name="password" // Matches the `password` key in `credentials`
               placeholder="Password"
               value={loginForm.password}
               onChange={(e) => handleChangeForm(e)}

@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
-import type { NextAuthConfig } from "next-auth";
-
+import type { NextAuthOptions } from "next-auth";
 import type { Session, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import { PrismaAdapter } from "@auth/prisma-adapter";
@@ -9,21 +8,17 @@ import { prisma } from "@/utils/prisma";
 import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-interface userCredentials {
-  email: string;
-  password: string;
-}
-
-export const options: NextAuthConfig = {
+export const options: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       id: "credentials",
       name: "Credentials",
       credentials: {
-        email: { label: "Username", type: "text", placeholder: "jsmith" },
+        email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
+        console.log(credentials);
         // Ensure credentials exist and are valid
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Invalid email or password");
@@ -35,14 +30,23 @@ export const options: NextAuthConfig = {
         };
 
         try {
-          const res = await axios.post(`/api/auth/`, userCredentials, {
-            headers: { "Content-Type": "application/json" },
-          });
+          const res = await axios.post(
+            `${process.env.NEXTAUTH_URL}/api/auth/login`,
+            userCredentials,
+            {
+              headers: { "Content-Type": "application/json" },
+              // validateStatus: (status) => status < 500,
+            }
+          );
+
+          console.log("RESSSSPONSE", res);
 
           if (res.status === 200 && res.data) {
             return res.data; // Return user data if authentication is successful
+          } else {
+            const error = res.data;
+            return error.error; // Return null if authentication fails
           }
-          return null; // Return null if authentication fails
         } catch (error) {
           console.error("Authorization error:", error);
           return null; // Handle error gracefully
@@ -57,11 +61,11 @@ export const options: NextAuthConfig = {
   jwt: {
     maxAge: 60 * 60 * 24 * 30,
   },
-  pages: {
-    signIn: "/auth/login",
-    signOut: "/auth/login",
-    error: "/auth/login",
-  },
+  // pages: {
+  //   signIn: "/auth/login",
+  //   signOut: "/auth/login",
+  //   error: "/auth/login",
+  // },
   callbacks: {
     async session({ session, token }: { session: Session; token: JWT }) {
       if (token) {
@@ -83,6 +87,10 @@ export const options: NextAuthConfig = {
   },
 };
 
-export default function authHandler(req: NextApiRequest, res: NextApiResponse) {
-  return NextAuth(options);
-}
+// export default function authHandler(req: NextApiRequest, res: NextApiResponse) {
+//   (req: NextApiRequest, res: NextApiResponse) => NextAuth(req, res, options);
+// }
+// export default (req: NextApiRequest, res: NextApiResponse) => NextAuth(options);
+
+export default (req: NextApiRequest, res: NextApiResponse) =>
+  NextAuth(req, res, options);

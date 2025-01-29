@@ -15,12 +15,13 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === "GET") {
+  if (req.method === "POST") {
     const { email, password } = req.body;
 
     try {
       const response = await handeLoginUser(email, password);
-      if (response?.success) {
+      console.log("API RESPONSE", response);
+      if (response.success) {
         return res.status(200).json(response?.user);
       } else {
         return res.status(401).json({ error: response?.error });
@@ -68,7 +69,7 @@ async function handeLoginUser(email: string, password: string) {
     return { success: false, error: "Invalid email or password" };
   }
 
-  return { success: false, user: exclude(user, ["password"]) };
+  return { success: true, user: exclude(user, ["password"]) };
 }
 
 // Function to exclude user password returned from prisma
