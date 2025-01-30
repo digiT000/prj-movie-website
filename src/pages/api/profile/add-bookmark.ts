@@ -30,8 +30,6 @@ export default async function handler(
 
     const userId = session.user.id; // Ensure your NextAuth user object has an `id`
 
-    console.log("REQ", req.body);
-
     const movie: MovieProps = {
       id: Number(req.body.id),
       title: req.body.title,
@@ -39,8 +37,6 @@ export default async function handler(
       poster: req.body.poster,
       movieType: req.body.movieType,
     };
-
-    console.log(movie);
 
     // 4️⃣ Call service to add bookmark
     const response = await profileService.addNewBookmark(userId!, movie);

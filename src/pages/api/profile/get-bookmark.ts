@@ -2,6 +2,8 @@ import { Prisma } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ProfileService } from "@/services/profile";
 import { getToken } from "next-auth/jwt";
+import { getServerSession } from "next-auth";
+import { options } from "../auth/[...nextauth]";
 
 const profileService = new ProfileService();
 
@@ -15,20 +17,18 @@ export default async function handler(
   }
 
   try {
-    // 1️⃣ Extract and verify token
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    // 🔹 Get authenticated user session
+    const session = await getServerSession(req, res, options);
 
-    if (!token) {
+    if (!session || !session.user) {
       return res.status(401).json({ message: "Unauthorized. Please log in." });
     }
 
-    // 2️⃣ Extract user ID from token
-    const userId = token.sub; // NextAuth stores user ID in `sub`
-
+    const userId = session.user.id; // Ensure your NextAuth user object has an `id`
     // 4️⃣ Call service to add bookmark
     const response = await profileService.getBookmarkData(userId!);
     if (response.success) {
-      return res.status(201).json(response.data);
+      return res.status(200).json(response.data);
     }
 
     return res.status(400).json(response.error);

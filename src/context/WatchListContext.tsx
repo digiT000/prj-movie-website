@@ -1,13 +1,18 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { MovieProps } from "@/models/interface";
-import { addNewBookmark } from "@/utils/profile.api";
+import { MovieProps, WatchlistProps } from "@/models/interface";
+import {
+  addNewBookmark,
+  getBookmark,
+  removeBookmark,
+} from "@/utils/profile.api";
+import { useSession } from "next-auth/react";
 
 interface WatchlistProviderProps {
   children: React.ReactNode;
 }
 interface WatchListContextType {
-  watchList: MovieProps[];
+  watchList: WatchlistProps[];
   addToWachList: (movie: MovieProps) => Promise<void>; // Add `Promise<void>`
   removeFromWatchList: (movieId: number) => void;
   isWatchList: (movieId: number) => boolean;
@@ -30,18 +35,25 @@ export const useWatchListContext = () => {
 };
 
 export function WatchListProvider({ children }: WatchlistProviderProps) {
+  const { status } = useSession();
+
   const [loading, setLoading] = useState<boolean>(true); // Loading state
-  const [watchList, setWatchList] = useState<MovieProps[]>([]); // Watchlist state
+  const [watchList, setWatchList] = useState<WatchlistProps[]>([]); // Watchlist state
 
   // Fetch the watchlist from localStorage on component mount
   useEffect(() => {
     setLoading(true); // Start loading
     const fetchWatchList = async () => {
       try {
-        const storedWatchList = localStorage.getItem("user_watchList");
-        if (storedWatchList) {
-          setWatchList(JSON.parse(storedWatchList)); // Parse and set watchlist
+        if (status !== "authenticated") {
+          return;
         }
+        const response = await getBookmark();
+        if (response.success) {
+          setWatchList(response.data); // Set watchlist
+          return;
+        }
+        setWatchList([]);
       } catch (error) {
         console.error("Error fetching watchlist from localStorage:", error);
       } finally {
@@ -50,13 +62,16 @@ export function WatchListProvider({ children }: WatchlistProviderProps) {
     };
 
     fetchWatchList();
-  }, []);
+  }, [status]);
 
   const addToWachList = async (movie: MovieProps) => {
     try {
+      if (status !== "authenticated") {
+        return;
+      }
       const newBookmark = await addNewBookmark(movie);
       if (newBookmark.success) {
-        setWatchList((prev) => [...prev, movie]);
+        setWatchList((prev) => [...prev, newBookmark.data]);
       } else {
         console.error("Error adding bookmark:", newBookmark.error);
       }
@@ -64,12 +79,29 @@ export function WatchListProvider({ children }: WatchlistProviderProps) {
       console.error("Error fetching movie details:", error);
     }
   };
-  const removeFromWatchList = (movieId: number) => {
-    setWatchList((prev) => prev.filter((movie) => movie.id !== movieId));
+  const removeFromWatchList = async (movieId: number) => {
+    try {
+      if (status !== "authenticated") {
+        return;
+      }
+      const response = await removeBookmark(movieId);
+      if (response.success) {
+        setWatchList((prev) =>
+          prev.filter((movie) => Number(movie.id) !== movieId)
+        );
+        return;
+      } else {
+        console.error("Error removing bookmark:", response.error);
+        return; // Retry removing bookmark if failed for some reason (e.g., rate limit exceeded)
+      }
+    } catch (error) {
+      console.error("Error fetching movie details:", error);
+      return; // Retry removing bookmark if failed for some reason (e.g., rate limit exceeded)
+    }
   };
 
   const isWatchList = (movieId: number) => {
-    return watchList.some((movie) => movie.id === movieId);
+    return watchList.some((movie) => Number(movie.id) === movieId);
   };
 
   const value: WatchListContextType = {

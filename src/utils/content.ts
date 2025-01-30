@@ -54,8 +54,10 @@ class ContentFetch {
       const movieData = response.data.results;
       const totalPages = response.data.total_pages;
       const totalResults = response.data.total_results;
-      const movies = mappedResponse(movieData);
-
+      const movies = mappedResponse(movieData).map((movie) => ({
+        ...movie,
+        movieType: "movie", // ✅ Assigning movieType manually
+      }));
       return { totalPages, movies, totalResults };
     } catch (error: any) {
       console.error("Error fetching trending movies:", error);
@@ -73,7 +75,11 @@ class ContentFetch {
       const movieData = response.data.results;
       const totalPages = response.data.total_pages;
       const totalResults = response.data.total_results;
-      const movies = mappedResponse(movieData);
+      // ✅ Add `movieType` manually to each movie object
+      const movies = mappedResponse(movieData).map((movie) => ({
+        ...movie,
+        movieType: "movie", // ✅ Assigning movieType manually
+      }));
 
       return { totalPages, movies, totalResults };
     } catch (error: any) {
@@ -92,8 +98,10 @@ class ContentFetch {
       const movieData = response.data.results;
       const totalPages = response.data.total_pages;
       const totalResults = response.data.total_results;
-      const movies = mappedResponse(movieData);
-
+      const movies = mappedResponse(movieData).map((movie) => ({
+        ...movie,
+        movieType: "tv", // ✅ Assigning movieType manually
+      }));
       return { totalPages, movies, totalResults };
     } catch (error: any) {
       console.error("Error fetching trending movies:", error);

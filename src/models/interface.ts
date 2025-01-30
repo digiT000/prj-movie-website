@@ -13,6 +13,11 @@ export interface MovieProps {
   movieType: string;
 }
 
+// ✅ Correct syntax: Using `extends` to inherit properties from `MovieProps`
+export interface WatchlistProps extends MovieProps {
+  bookmarkId: string;
+}
+
 export interface SearchBarProps {
   searchString?: string;
   type: SearchType;

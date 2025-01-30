@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/utils/prisma";
 import { Prisma } from "@prisma/client";
-import { MovieProps } from "@/models/interface";
+import { MovieProps, WatchlistProps } from "@/models/interface";
+import { Bookmark } from "lucide-react";
 
 export class ProfileService {
   async addNewBookmark(userId: string, movie: MovieProps) {
@@ -23,9 +24,17 @@ export class ProfileService {
         },
       });
 
+      // ✅ Extract only required fields
       return {
         success: true,
-        data: watchlistItem,
+        data: {
+          BookmarkId: watchlistItem.id,
+          id: watchlistItem.movieId,
+          title: watchlistItem.title,
+          movieType: watchlistItem.movieType,
+          year: watchlistItem.year,
+          poster: watchlistItem.poster,
+        },
         message: "Add to watchlist",
       };
     } catch (error) {
@@ -37,6 +46,8 @@ export class ProfileService {
   }
 
   async removeBookmark(userId: string, movieId: string) {
+    console.log("INNER", movieId);
+    console.log("INNER", userId);
     try {
       // Check if the user available
       const user = await this.checkUser(userId);
@@ -44,9 +55,23 @@ export class ProfileService {
         return { success: false, error: "User not found" };
       }
 
+      // 2️⃣ Check if the movie exists in the user's watchlist
+      const bookmark = await prisma.watchlist.findFirst({
+        where: {
+          userId: userId, // Ensure the user owns the bookmark
+          movieId: movieId, // Find by movieId
+        },
+      });
+
+      if (!bookmark) {
+        return { success: false, error: "Movie not found in watchlist" };
+      }
+      console.log(bookmark);
+
+      // 3️⃣ Delete the bookmark using `movieId`
       await prisma.watchlist.delete({
         where: {
-          userId_movieId: { userId, movieId },
+          id: bookmark.id, // Delete using the found bookmark ID
         },
       });
       return { success: true, message: "Movie removed from watchlist" };
@@ -67,7 +92,20 @@ export class ProfileService {
         where: { userId },
         orderBy: { addedAt: "desc" },
       });
-      return { success: true, data: watchlistItems };
+
+      // 3️⃣ Transform the response to match `WatchlistProps`
+      const formattedWatchlist: WatchlistProps[] = watchlistItems.map(
+        (item) => ({
+          bookmarkId: item.id, // ✅ Use database ID as `bookmarkId`
+          id: parseInt(item.movieId), // ✅ Convert `movieId` (string) to `number`
+          title: item.title,
+          year: item.year,
+          poster: item.poster as string,
+          movieType: item.movieType,
+        })
+      );
+
+      return { success: true, data: formattedWatchlist };
     } catch (error) {
       return { success: false, error };
     }
