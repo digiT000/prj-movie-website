@@ -7,6 +7,7 @@ import { NavMaps } from "@/utils/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface RegisterFormProps {
   name: string;
@@ -16,7 +17,8 @@ interface RegisterFormProps {
 }
 
 export default function Register() {
-  const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
+  const [isLoading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [registerForm, setRegisterForm] = useState<RegisterFormProps>({
     name: "",
@@ -38,7 +40,8 @@ export default function Register() {
       setError("Passwords do not match");
       return;
     }
-
+    setBtnDisable(true);
+    setLoading(true);
     const createUser = await createNewUser(registerForm);
     if (!createUser.success) {
       setError(createUser.error);
@@ -46,10 +49,9 @@ export default function Register() {
       setBtnDisable(false);
       return;
     }
-    console.log("succeess");
-
-    setLoading(true);
-    setBtnDisable(true);
+    // Store email in sessionStorage before navigating
+    sessionStorage.setItem("prefillEmail", registerForm.email);
+    router.push("/auth/login");
   }
 
   useEffect(() => {
@@ -113,11 +115,9 @@ export default function Register() {
               value={registerForm.repeatPassword}
               onChange={(e) => handleChangeForm(e)}
             />
-            <Button
-              disabled={btnDisable}
-              label="Create an account"
-              type="submit"
-            />
+            <Button disabled={btnDisable} type="submit" isLoading={isLoading}>
+              Create an account
+            </Button>
           </form>
           <p className="text-center text-body-M">
             Already have an account?{`  `}

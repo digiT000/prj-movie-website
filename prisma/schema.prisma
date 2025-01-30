@@ -19,6 +19,8 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  watchlist     Watchlist[] // Add this line
+
 
  
   createdAt DateTime @default(now())
@@ -67,6 +69,22 @@ model VerificationToken {
   expires    DateTime
  
   @@id([identifier, token])
-      @@schema("public")
+  @@schema("public")
+}
+
+model Watchlist {
+  id        String   @id @default(cuid())
+  userId    String
+  movieId   String   // TMDB movie ID
+  title     String   // Movie title
+  year      Int
+  movieType   String 
+  poster    String?  // Movie poster image (optional)
+  addedAt   DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, movieId]) // Ensures a user can't add the same movie multiple times
+  @@schema("public")
 }
  
+

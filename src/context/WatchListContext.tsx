@@ -1,13 +1,14 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { MovieProps } from "@/models/interface";
+import { addNewBookmark } from "@/utils/profile.api";
 
 interface WatchlistProviderProps {
   children: React.ReactNode;
 }
 interface WatchListContextType {
   watchList: MovieProps[];
-  addToWachList: (movie: MovieProps) => void;
+  addToWachList: (movie: MovieProps) => Promise<void>; // Add `Promise<void>`
   removeFromWatchList: (movieId: number) => void;
   isWatchList: (movieId: number) => boolean;
   loading: boolean;
@@ -51,8 +52,17 @@ export function WatchListProvider({ children }: WatchlistProviderProps) {
     fetchWatchList();
   }, []);
 
-  const addToWachList = (movie: MovieProps) => {
-    setWatchList((prev) => [...prev, movie]);
+  const addToWachList = async (movie: MovieProps) => {
+    try {
+      const newBookmark = await addNewBookmark(movie);
+      if (newBookmark.success) {
+        setWatchList((prev) => [...prev, movie]);
+      } else {
+        console.error("Error adding bookmark:", newBookmark.error);
+      }
+    } catch (error) {
+      console.error("Error fetching movie details:", error);
+    }
   };
   const removeFromWatchList = (movieId: number) => {
     setWatchList((prev) => prev.filter((movie) => movie.id !== movieId));

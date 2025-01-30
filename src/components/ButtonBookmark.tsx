@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Bookmark } from "lucide-react";
 import { useWatchListContext } from "@/context/WatchListContext";
 import { MovieProps } from "@/models/interface";
@@ -10,13 +10,16 @@ interface BookmarkProps {
 
 export default function ButtonBookmark({ isActive, movie }: BookmarkProps) {
   const { addToWachList, removeFromWatchList } = useWatchListContext();
+  const [isDisable, setIsDisable] = useState<boolean>(false);
 
-  function handleBookmark(event: React.MouseEvent<HTMLButtonElement>) {
+  async function handleBookmark(event: React.MouseEvent<HTMLButtonElement>) {
     event.stopPropagation(); // Prevent the Link from being triggered
     if (isActive) {
       removeFromWatchList(movie.id);
     } else {
-      addToWachList(movie);
+      setIsDisable(true);
+      await addToWachList(movie);
+      setIsDisable(false);
     }
   }
 
@@ -26,6 +29,7 @@ export default function ButtonBookmark({ isActive, movie }: BookmarkProps) {
   return (
     <button
       onClick={handleBookmark}
+      disabled={isDisable}
       className="group absolute top-4 right-4 p-2 bg-dark_blue bg-opacity-50 rounded-full hover:bg-opacity-100 hover:bg-pure_white transition-all duration-300 ease-in-out"
     >
       <Bookmark

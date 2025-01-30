@@ -67,11 +67,9 @@ export const options: NextAuthOptions = {
   },
   callbacks: {
     async session({ session, token }: { session: Session; token: JWT }) {
-      console.log("SESSION", session);
-      console.log("TOKEN", token);
-
       if (token) {
         session.user = {
+          id: token.sub as string,
           email: token.email,
           name: token.name || "",
           image: token.picture || null,

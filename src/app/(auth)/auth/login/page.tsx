@@ -21,7 +21,7 @@ const dummyUsers = [
 
 export default function Login() {
   const router = useRouter();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [loginForm, setLoginForm] = useState<LoginFormProps>({
     email: "",
@@ -53,9 +53,23 @@ export default function Login() {
     } else {
       // Toast failed
       setError("Invalid email or password");
+      setLoading(false);
+      setBtnDisable(false);
       return;
     }
   }
+
+  useEffect(() => {
+    // Retrieve the stored email and remove it after use
+    const storedEmail = sessionStorage.getItem("prefillEmail");
+    if (storedEmail) {
+      setLoginForm({
+        email: storedEmail,
+        password: "", // Clear password field
+      });
+      sessionStorage.removeItem("prefillEmail"); // Clear after use
+    }
+  }, []);
 
   useEffect(() => {
     setBtnDisable(loginForm.email === "" || loginForm.password === "");
@@ -102,11 +116,10 @@ export default function Login() {
               value={loginForm.password}
               onChange={(e) => handleChangeForm(e)}
             />
-            <Button
-              disabled={btnDisable}
-              label="Login to your account"
-              type="submit"
-            />
+            <Button disabled={btnDisable} type="submit" isLoading={isLoading}>
+              {" "}
+              Login to your account
+            </Button>
           </form>
           <p className="text-center text-body-M">
             Don't have an account?{`  `}

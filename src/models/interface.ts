@@ -22,3 +22,19 @@ export interface ReturnPagination {
   movies: MovieProps[];
   totalResults: number;
 }
+
+// ----------------------------------------------------------------
+// AUTH INTERFACE
+export interface UserProps {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface UserResponse {
+  id: string;
+  name: string | null;
+  email: string;
+  password: string | null;
+  image: string | null;
+}

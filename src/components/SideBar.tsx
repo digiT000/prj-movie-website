@@ -7,6 +7,7 @@ import { navLinks } from "@/utils/navigation";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
+import UserProfile from "./UserProfile";
 
 export default function SideBar() {
   const { data, status } = useSession();
@@ -18,13 +19,12 @@ export default function SideBar() {
     setIsOpen(!isOpen);
   }
 
-  function renderAction() {}
   return (
     <aside className="hidden md:inline-block p-5">
       <motion.div
         ref={sidebarRef}
         initial={false}
-        animate={{ width: isOpen ? "200px" : "64px" }}
+        animate={{ width: isOpen ? "200px" : "72px" }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className={`flex flex-col gap-10 justify-between bg-semi_dark_blue p-4 rounded-2xl w-full h-full`}
       >
@@ -92,32 +92,7 @@ export default function SideBar() {
             })}
           </nav>
         </div>
-        {status === "loading" ? (
-          <div className="w-full h-10 rounded-full bg-dark_blue animate-pulse"></div>
-        ) : (
-          <div className="flex gap-3 items-center">
-            <Image
-              src={data?.user?.image || "/dummyProfile.jpeg"}
-              alt="profile image"
-              width={100}
-              height={100}
-              className="w-10 h-10 rounded-full object-cover"
-            />
-            <motion.span
-              initial={{ opacity: 0, width: 0 }}
-              animate={
-                isOpen
-                  ? { opacity: 1, width: "auto" }
-                  : { opacity: 0, width: 0 }
-              }
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="overflow-hidden text-body-S line-clamp-2"
-            >
-              {data?.user?.name}
-            </motion.span>
-          </div>
-        )}
-        {/* Profile Image */}
+        <UserProfile isOpen={isOpen} />
       </motion.div>
     </aside>
   );
