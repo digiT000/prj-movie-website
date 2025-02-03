@@ -1,6 +1,7 @@
 import { SearchResult } from "@/context/Searching";
 import { MovieProps, ReturnPagination } from "@/models/interface";
 import axios, { AxiosError } from "axios";
+import { getBookmark } from "./profile.api";
 
 const API_KEY = process.env.NEXT_PUBLIC_API_MOVIE_KEY;
 axios.defaults.baseURL = "https://api.themoviedb.org/3";
@@ -189,6 +190,27 @@ class ContentFetch {
       return { totalPages, movies, totalResults };
     } catch (error: any) {
       console.error("Error fetching trending movies:", error);
+      return { totalPages: 1, movies: [], totalResults: 0 }; // Return empty array on error
+    }
+  }
+
+  async fetchUserBookmark(
+    authenticated: "authenticated" | "loading" | "unauthenticated"
+  ) {
+    if (authenticated === "authenticated") {
+      try {
+        const response = await getBookmark();
+        console.log(response.data);
+        const movieData = response.data;
+
+        const movies = mappedResponse(movieData);
+
+        return { totalPages: 1, movies, totalResults: 0 };
+      } catch (error: any) {
+        console.error("Error fetching trending movies:", error);
+        return { totalPages: 1, movies: [], totalResults: 0 }; // Return empty array on error
+      }
+    } else {
       return { totalPages: 1, movies: [], totalResults: 0 }; // Return empty array on error
     }
   }
