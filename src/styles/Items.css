@@ -1,0 +1,17 @@
+/* [1] The container */
+.img-hover-zoom {
+  overflow: hidden; /* [1.2] Hide the overflowing of child elements */
+}
+
+/* Brightness-zoom Container */
+.img-hover-zoom--brightness img {
+  transition: transform 0.4s, filter 0.4s ease-in-out;
+  transform-origin: center center;
+  filter: brightness(80%);
+}
+
+/* The Transformation */
+.img-hover-zoom--brightness:hover img {
+  filter: brightness(100%);
+  transform: scale(1.05);
+}

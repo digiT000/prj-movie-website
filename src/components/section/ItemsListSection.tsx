@@ -12,14 +12,12 @@ interface ItemListProps {
   headers: string;
   fetchingData: (page: number) => Promise<ReturnPagination>;
   type: SearchType;
-  usePagination: boolean;
 }
 
 export default function ItemsListSection({
   headers,
   fetchingData,
   type,
-  usePagination,
 }: ItemListProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -59,15 +57,13 @@ export default function ItemsListSection({
           })
         )}
       </div>
-      {usePagination && (
-        <Pagination
-          className="w-full flex justify-center"
-          currentPage={currentPage}
-          onPageChange={(page) => handlePagination(page)}
-          pageSize={data.totalPages}
-          totalCount={data.totalResults}
-        />
-      )}
+      <Pagination
+        className="w-full flex justify-center"
+        currentPage={currentPage}
+        onPageChange={(page) => handlePagination(page)}
+        pageSize={data.totalPages}
+        totalCount={data.totalResults}
+      />
     </SectionWrapper>
   );
 }

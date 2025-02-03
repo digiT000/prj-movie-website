@@ -21,6 +21,8 @@ const mappedResponse = (movieData: any) => {
       0,
     poster: movie.backdrop_path
       ? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`
+      : movie.poster
+      ? movie.poster
       : "/noImage.JPG",
     movieType: movie.media_type,
   }));
@@ -198,9 +200,10 @@ class ContentFetch {
     authenticated: "authenticated" | "loading" | "unauthenticated"
   ) {
     if (authenticated === "authenticated") {
+      console.log("Authenticated");
       try {
         const response = await getBookmark();
-        console.log(response.data);
+        console.log(response);
         const movieData = response.data;
 
         const movies = mappedResponse(movieData);
@@ -211,6 +214,7 @@ class ContentFetch {
         return { totalPages: 1, movies: [], totalResults: 0 }; // Return empty array on error
       }
     } else {
+      console.log("tes");
       return { totalPages: 1, movies: [], totalResults: 0 }; // Return empty array on error
     }
   }

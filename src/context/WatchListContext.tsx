@@ -13,6 +13,8 @@ interface WatchlistProviderProps {
 }
 interface WatchListContextType {
   watchList: WatchlistProps[];
+  movieList: MovieProps[];
+  tvList: MovieProps[];
   addToWachList: (movie: MovieProps) => Promise<void>; // Add `Promise<void>`
   removeFromWatchList: (movieId: number) => void;
   isWatchList: (movieId: number) => boolean;
@@ -39,6 +41,8 @@ export function WatchListProvider({ children }: WatchlistProviderProps) {
 
   const [loading, setLoading] = useState<boolean>(true); // Loading state
   const [watchList, setWatchList] = useState<WatchlistProps[]>([]); // Watchlist state
+  const [movieList, setMovieList] = useState<MovieProps[]>([]); // Movie list state
+  const [tvList, setTvList] = useState<MovieProps[]>([]); // TV show list state
 
   // Fetch the watchlist from localStorage on component mount
   useEffect(() => {
@@ -106,15 +110,24 @@ export function WatchListProvider({ children }: WatchlistProviderProps) {
 
   const value: WatchListContextType = {
     watchList,
+    movieList,
+    tvList,
     addToWachList,
     removeFromWatchList,
     isWatchList,
     loading,
   };
+  console.log(movieList, tvList);
 
   useEffect(() => {
     try {
       localStorage.setItem("user_watchList", JSON.stringify(watchList));
+      setMovieList(
+        watchList.filter((movie: MovieProps) => movie.movieType === "movie")
+      );
+      setTvList(
+        watchList.filter((movie: MovieProps) => movie.movieType === "tv")
+      );
     } catch (error) {
       console.error("Error saving favorites to localStorage:", error);
     }

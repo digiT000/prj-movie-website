@@ -4,7 +4,7 @@ import React from "react";
 import SectionWrapper from "./SectionWrapper";
 import { useSearchingContext } from "@/context/Searching";
 import MovieCard from "../MovieCard";
-import { MovieProps } from "@/models/interface";
+import { MovieProps, SearchType } from "@/models/interface";
 import Pagination from "../Pagination";
 import { useRouter } from "next/navigation";
 
@@ -29,10 +29,25 @@ export default function SearchResult() {
     return <span>Loading...</span>;
   }
 
+  const renderSearchTye = () => {
+    switch (searchTerm.searchType) {
+      case SearchType.movies:
+        return "Movies";
+      case SearchType.tv:
+        return "Tv Series";
+      case SearchType.bookmarks:
+        return "Bookmarks";
+      case SearchType.all:
+        return "Movies & Tv Series";
+      default:
+        return "Movies & Tv Series";
+    }
+  };
+
   return (
     <SectionWrapper>
       <h1 className="text-heading-L font-light">
-        Found {searchResult?.totalResults} results for{" "}
+        {renderSearchTye()} | Found {searchResult?.totalResults} results for{" "}
         {`'${searchTerm.searchString}'`}
       </h1>
       <div className="items-grid">

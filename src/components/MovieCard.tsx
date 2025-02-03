@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import ButtonBookmark from "./ButtonBookmark";
+import "../styles/Items.css";
 
 interface MovieCardProps {
   cardType: "card" | "carousel";
@@ -42,13 +43,16 @@ export default function MovieCard({ cardType, movie }: MovieCardProps) {
         <div className="flex flex-col gap-2">
           {/* Poster Image */}
           <div className="relative">
-            <Link href={`/movies/${movie.id}`} className="block">
+            <Link
+              href={`/movies/${movie.id}`}
+              className="block img-hover-zoom img-hover-zoom--brightness"
+            >
               <Image
                 alt={movie.title}
                 src={movie.poster}
                 width={500}
                 height={500}
-                className="aspect-3/2 object-cover rounded-lg min-h-[180px] max-h-[230px] "
+                className="w-full aspect-3/2 object-cover rounded-lg min-h-[180px] max-h-[230px] "
               />
             </Link>
             {loading ? (
@@ -76,7 +80,10 @@ export default function MovieCard({ cardType, movie }: MovieCardProps) {
         <div className="flex flex-col gap-2 w-[470px] min-h-[270px]">
           {/* Poster Image */}
           <div className="relative h-full">
-            <Link href={`/movies/${movie.id}`} className="block">
+            <Link
+              href={`/movies/${movie.id}`}
+              className="block img-hover-zoom img-hover-zoom--brightness"
+            >
               <Image
                 alt={movie.title}
                 src={movie.poster}
