@@ -1,36 +1,26 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Catering Website Project
 
-## Getting Started
+This is a catering website built with Next.js, where users can find catering packages and contact the catering owner. The project aims to practice Next.js, TypeScript, and implementing `useContext` to enable language switching between Indonesian and English.
 
-First, run the development server:
+## Purpose
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The primary purpose of this project is to practice:
+- Next.js for building a server-side rendered React application.
+- `useContext` for managing the global state of language preference.
+- Tailwind CSS for styling.
+- Contentful as a Headless CMS to manage the content dynamically.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Catering Packages**: Users can view various catering packages.
+- **Language Toggle**: Users can switch between Indonesian and English using a language context implemented with `useContext`.
+- **Contact Section**: Users can contact the catering owner for inquiries.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tech Stack
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Next.js**: Framework for React for server-side rendering and static site generation.
+- **Tailwind CSS**: Utility-first CSS framework for rapid UI development.
+- **TypeScript**: A superset of JavaScript that adds type safety.
+- **Contentful**: Headless CMS to manage content dynamically.
+- **React.js**: A JavaScript library for building user interfaces.
+- **Axios**: Promise-based HTTP client for making API requests.
