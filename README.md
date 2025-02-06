@@ -24,3 +24,8 @@ The primary purpose of this project is to practice:
 - **Contentful**: Headless CMS to manage content dynamically.
 - **React.js**: A JavaScript library for building user interfaces.
 - **Axios**: Promise-based HTTP client for making API requests.
+
+## Website Link
+
+You can view the live project at:  
+[https://prj-catering-website.vercel.app/](https://prj-catering-website.vercel.app/)
