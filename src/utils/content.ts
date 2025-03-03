@@ -1,7 +1,11 @@
 import { SearchResult } from "@/context/Searching";
 import { MovieProps, ReturnPagination } from "@/models/interface";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { getBookmark } from "./profile.api";
+
+interface MediaType {
+  media_type: "movie" | "tv";
+}
 
 const API_KEY = process.env.NEXT_PUBLIC_API_MOVIE_KEY;
 axios.defaults.baseURL = "https://api.themoviedb.org/3";
@@ -62,7 +66,7 @@ class ContentFetch {
         movieType: "movie", // ✅ Assigning movieType manually
       }));
       return { totalPages, movies, totalResults };
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error fetching trending movies:", error);
       return { totalPages: 1, movies: [], totalResults: 0 }; // Return empty array on error
     }
@@ -85,7 +89,7 @@ class ContentFetch {
       }));
 
       return { totalPages, movies, totalResults };
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error fetching trending movies:", error);
       return { totalPages: 1, movies: [], totalResults: 0 }; // Return empty array on error
     }
@@ -106,7 +110,7 @@ class ContentFetch {
         movieType: "tv", // ✅ Assigning movieType manually
       }));
       return { totalPages, movies, totalResults };
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error fetching trending movies:", error);
       return { totalPages: 1, movies: [], totalResults: 0 }; // Return empty array on error
     }
@@ -125,7 +129,7 @@ class ContentFetch {
         headers: headers,
       });
       const movieData = response.data.results.filter(
-        (result: any) =>
+        (result: MediaType) =>
           result.media_type === "movie" || result.media_type === "tv"
       );
       const totalPages = response.data.total_pages;
@@ -190,7 +194,7 @@ class ContentFetch {
       const movies = mappedResponse(movieData);
 
       return { totalPages, movies, totalResults };
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error fetching trending movies:", error);
       return { totalPages: 1, movies: [], totalResults: 0 }; // Return empty array on error
     }
@@ -209,7 +213,7 @@ class ContentFetch {
         const movies = mappedResponse(movieData);
 
         return { totalPages: 1, movies, totalResults: 0 };
-      } catch (error: any) {
+      } catch (error) {
         console.error("Error fetching trending movies:", error);
         return { totalPages: 1, movies: [], totalResults: 0 }; // Return empty array on error
       }

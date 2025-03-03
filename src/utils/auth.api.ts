@@ -4,7 +4,6 @@ interface UserData {
   password: string;
 }
 
-const baseURL = process.env.NEXT_PUBLIC_NEXT_AUTH_URL;
 export async function createNewUser(userData: UserData) {
   try {
     const response = await axios.post(`/api/auth/createUser`, userData, {
@@ -20,6 +19,7 @@ export async function createNewUser(userData: UserData) {
       return { success: false, error: response.data };
     }
   } catch (error) {
+    console.log(error);
     return {
       success: false,
       error: "Something went wrong,Please refresh and try again",

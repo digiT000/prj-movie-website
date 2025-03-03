@@ -14,11 +14,6 @@ interface LoginFormProps {
   password: string;
 }
 
-const dummyUsers = [
-  { id: 1, email: "admin@example.com", password: "admin123" },
-  { id: 2, email: "farel@example.com", passwprd: "admin123" },
-];
-
 export default function Login() {
   const router = useRouter();
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -45,7 +40,6 @@ export default function Login() {
       password: loginForm.password, // Matches the `password` key
       redirect: false, // Optional, to handle redirects yourself
     });
-    console.log(res);
     if (res?.ok) {
       // toast success
       router.push("/");
@@ -117,12 +111,11 @@ export default function Login() {
               onChange={(e) => handleChangeForm(e)}
             />
             <Button disabled={btnDisable} type="submit" isLoading={isLoading}>
-              {" "}
               Login to your account
             </Button>
           </form>
           <p className="text-center text-body-M">
-            Don't have an account?{`  `}
+            {`Don't have an account?`}
             <Link
               className="text-red hover:text-dark_red"
               href={NavMaps.REGSITER}

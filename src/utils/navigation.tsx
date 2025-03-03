@@ -1,9 +1,9 @@
-import { Home, Film, Tv, FileVideo } from "lucide-react";
+import { Home, Film, Tv, FileVideo, LucideIcon } from "lucide-react";
 
 interface NavLinkProps {
   link: NavMaps;
   label: string;
-  icon: React.FC<any>; // LucideIcon type
+  icon: LucideIcon; // LucideIcon type
 }
 
 export enum NavMaps {

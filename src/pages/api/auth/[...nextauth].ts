@@ -19,7 +19,7 @@ export const options: NextAuthOptions = {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         console.log(credentials);
         // Ensure credentials exist and are valid
         if (!credentials?.email || !credentials?.password) {

@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 export default function SearchBar({ searchString, type }: SearchBarProps) {
   const router = useRouter();
 
-  const { setSearchTerm, setIsSearching, searchTerm } = useSearchingContext();
+  const { setSearchTerm, setIsSearching } = useSearchingContext();
   const [inputSearch, setInputSearch] = useState<string>(searchString || "");
 
   const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {

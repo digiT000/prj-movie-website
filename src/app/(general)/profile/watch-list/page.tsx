@@ -1,11 +1,10 @@
 "use client";
 import MovieCard from "@/components/MovieCard";
-import SearchBar from "@/components/SearchBar";
 import SectionWrapper from "@/components/section/SectionWrapper";
 import { useWatchListContext } from "@/context/WatchListContext";
-import { MovieProps, SearchType } from "@/models/interface";
+import { MovieProps } from "@/models/interface";
 import "../../../../styles/ItemList.css";
-import React, { useEffect } from "react";
+import React from "react";
 import { useSession } from "next-auth/react";
 import Button from "@/components/Button";
 import Link from "next/link";
@@ -53,10 +52,10 @@ export default function WatchList() {
         Login Now
       </Button>
       <div className="text-center">
-        <p>Don't have an account?</p>
+        <p>{`Don't have an account?`}</p>
         <Link className="text-red hover:text-dark_red" href={NavMaps.REGSITER}>
           Sign Up
-        </Link>{" "}
+        </Link>
       </div>
     </div>
   );

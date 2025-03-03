@@ -6,11 +6,6 @@ import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]";
 const profileService = new ProfileService();
 
-interface NewBookmark {
-  userId: string;
-  movie: MovieProps;
-}
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

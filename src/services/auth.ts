@@ -1,5 +1,4 @@
 import { prisma } from "@/utils/prisma";
-import { Prisma } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { UserProps, UserResponse } from "@/models/interface";
 
@@ -80,7 +79,7 @@ export class AuthService {
   // Function to exclude user password returned from prisma
   // Function to exclude user password returned from prisma
   exclude(user: UserResponse, keys: (keyof UserResponse)[]) {
-    for (let key of keys) {
+    for (const key of keys) {
       delete user[key];
     }
     return user;

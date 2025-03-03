@@ -21,6 +21,7 @@ export async function addNewBookmark(movie: MovieProps) {
       return { success: false, error: response.data };
     }
   } catch (error) {
+    console.error(error);
     return {
       success: false,
       error: "Something went wrong,Please refresh and try again",
@@ -45,13 +46,14 @@ export async function removeBookmark(movieId: number) {
       }
     );
 
-    console.log(response);
     if (response.status === 200) {
       return { success: true, user: response.data };
     } else {
       return { success: false, error: response.data };
     }
   } catch (error) {
+    console.error(error);
+
     return {
       success: false,
       error: "Something went wrong,Please refresh and try again",
@@ -69,13 +71,13 @@ export async function getBookmark() {
       validateStatus: (status) => status < 500,
     });
 
-    console.log(response);
     if (response.status === 200) {
       return { success: true, data: response.data };
     } else {
       return { success: false, error: response.data };
     }
   } catch (error) {
+    console.error(error);
     return {
       success: false,
       error: "Something went wrong,Please refresh and try again",

@@ -43,7 +43,7 @@ const Pagination = (props: PaginationProps) => {
     onPageChange(currentPage - 1);
   };
 
-  let lastPage = (paginationRange as (string | number)[])[
+  const lastPage = (paginationRange as (string | number)[])[
     (paginationRange as (string | number)[]).length - 1
   ];
   return (

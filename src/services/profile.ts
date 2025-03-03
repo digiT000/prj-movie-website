@@ -1,8 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/utils/prisma";
-import { Prisma } from "@prisma/client";
 import { MovieProps, WatchlistProps } from "@/models/interface";
-import { Bookmark } from "lucide-react";
 
 export class ProfileService {
   async addNewBookmark(userId: string, movie: MovieProps) {
@@ -119,6 +116,7 @@ export class ProfileService {
       }
       return false;
     } catch (error) {
+      console.log(error);
       return false;
     }
   }

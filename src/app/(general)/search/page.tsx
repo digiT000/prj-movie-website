@@ -6,7 +6,7 @@ import { SearchType } from "@/models/interface";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
 
-export default function page() {
+export default function SeachPage() {
   //   const { searchTerm } = useSearchingContext();
   const { setSearchTerm } = useSearchingContext();
 
