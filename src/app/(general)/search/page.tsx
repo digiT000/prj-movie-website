@@ -10,7 +10,8 @@ export default function page() {
   //   const { searchTerm } = useSearchingContext();
   const { setSearchTerm } = useSearchingContext();
 
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams()!;
+
   const searchType = searchParams.get("type");
   const searchQuery = searchParams.get("q");
   const page = searchParams.get("page");

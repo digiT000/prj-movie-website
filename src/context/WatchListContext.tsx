@@ -117,7 +117,6 @@ export function WatchListProvider({ children }: WatchlistProviderProps) {
     isWatchList,
     loading,
   };
-  console.log(movieList, tvList);
 
   useEffect(() => {
     try {

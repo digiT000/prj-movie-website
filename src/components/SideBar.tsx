@@ -10,11 +10,9 @@ import { useSession } from "next-auth/react";
 import UserProfile from "./UserProfile";
 
 export default function SideBar() {
-  const { data, status } = useSession();
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const currentPath = usePathname();
-  // const [path, setPath] = useState<string>("");
   function handleOpenSidebar() {
     setIsOpen(!isOpen);
   }

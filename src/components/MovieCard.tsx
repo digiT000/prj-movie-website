@@ -43,10 +43,7 @@ export default function MovieCard({ cardType, movie }: MovieCardProps) {
         <div className="flex flex-col gap-2">
           {/* Poster Image */}
           <div className="relative">
-            <Link
-              href={`/movies/${movie.id}`}
-              className="block img-hover-zoom img-hover-zoom--brightness"
-            >
+            <div className="block img-hover-zoom img-hover-zoom--brightness">
               <Image
                 alt={movie.title}
                 src={movie.poster}
@@ -54,7 +51,7 @@ export default function MovieCard({ cardType, movie }: MovieCardProps) {
                 height={500}
                 className="w-full aspect-3/2 object-cover rounded-lg min-h-[180px] max-h-[230px] "
               />
-            </Link>
+            </div>
             {loading ? (
               <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-greyish_blue transition-colors animate-pulse"></div>
             ) : (
@@ -80,10 +77,7 @@ export default function MovieCard({ cardType, movie }: MovieCardProps) {
         <div className="flex flex-col gap-2 w-[470px] min-h-[270px]">
           {/* Poster Image */}
           <div className="relative h-full">
-            <Link
-              href={`/movies/${movie.id}`}
-              className="block img-hover-zoom img-hover-zoom--brightness"
-            >
+            <div className="block img-hover-zoom img-hover-zoom--brightness">
               <Image
                 alt={movie.title}
                 src={movie.poster}
@@ -91,7 +85,7 @@ export default function MovieCard({ cardType, movie }: MovieCardProps) {
                 height={500}
                 className="aspect-3/2 object-cover rounded-lg min-h-[180px] max-h-[230px] "
               />
-            </Link>
+            </div>
             {loading ? (
               <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-greyish_blue transition-colors animate-pulse"></div>
             ) : (

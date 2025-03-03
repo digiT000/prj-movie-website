@@ -17,7 +17,6 @@ export default function WatchList() {
   const { movieList, tvList, loading } = useWatchListContext();
   const { status } = useSession();
 
-  console.log(movieList);
   return status === "authenticated" ? (
     <section className="flex flex-col gap-10 w-full">
       <SectionWrapper>
