@@ -3,7 +3,6 @@ import { useWatchListContext } from "@/context/WatchListContext";
 import { MovieProps } from "@/models/interface";
 import { Circle, Film, Tv } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import React from "react";
 import ButtonBookmark from "./ButtonBookmark";
 import "../styles/Items.css";
