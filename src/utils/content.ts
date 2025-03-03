@@ -6,6 +6,16 @@ import { getBookmark } from "./profile.api";
 interface MediaType {
   media_type: "movie" | "tv";
 }
+interface MovieData {
+  id: number;
+  title?: string;
+  name?: string;
+  release_date?: string;
+  first_air_date?: string;
+  backdrop_path?: string;
+  poster?: string;
+  media_type?: string;
+}
 
 const API_KEY = process.env.NEXT_PUBLIC_API_MOVIE_KEY;
 axios.defaults.baseURL = "https://api.themoviedb.org/3";
@@ -15,10 +25,10 @@ const headers = {
   Authorization: `Bearer ${API_KEY}`,
 };
 
-const mappedResponse = (movieData: any) => {
-  const mappedMovies: MovieProps[] = movieData.map((movie: any) => ({
+const mappedResponse = (movieData: MovieProps[]) => {
+  const mappedMovies: MovieProps[] = movieData.map((movie: MovieData) => ({
     id: movie?.id,
-    title: movie?.title || movie?.name,
+    title: movie?.title || movie?.name || "",
     year:
       Number(movie.release_date?.split("-")[0]) ||
       Number(movie.first_air_date?.split("-")[0]) ||
@@ -45,7 +55,7 @@ class ContentFetch {
 
       const movieData = response.data.results;
       return mappedResponse(movieData);
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error fetching trending movies:", error);
       return []; // Return empty array on error
     }
@@ -167,7 +177,7 @@ class ContentFetch {
       const movies = mappedResponse(movieData);
 
       return { totalPages, movies, totalResults };
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error fetching trending movies:", error);
       return { totalPages: 1, movies: [], totalResults: 0 }; // Return empty array on error
     }

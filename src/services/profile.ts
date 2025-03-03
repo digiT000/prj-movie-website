@@ -15,7 +15,7 @@ export class ProfileService {
           userId: userId,
           movieId: movie.id.toString(),
           title: movie.title,
-          movieType: movie.movieType,
+          movieType: movie.movieType as string,
           year: movie.year,
           poster: movie.poster,
         },

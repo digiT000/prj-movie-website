@@ -1,7 +1,6 @@
 import { Prisma } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ProfileService } from "@/services/profile";
-import { getToken } from "next-auth/jwt";
 import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]";
 

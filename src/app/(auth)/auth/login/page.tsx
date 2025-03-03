@@ -35,7 +35,7 @@ export default function Login() {
     setLoading(true);
     setBtnDisable(true);
 
-    let res = await signIn("credentials", {
+    const res = await signIn("credentials", {
       email: loginForm.email, // Matches the `email` key
       password: loginForm.password, // Matches the `password` key
       redirect: false, // Optional, to handle redirects yourself

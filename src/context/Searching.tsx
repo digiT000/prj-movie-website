@@ -2,8 +2,7 @@
 import ContentFetch from "@/utils/content";
 import { MovieProps, SearchType } from "@/models/interface";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 interface SearcingProviderProps {
   children: React.ReactNode;
@@ -55,8 +54,6 @@ export const useSearchingContext = () => {
 };
 
 export function SearchingProvider({ children }: SearcingProviderProps) {
-  const searchParams = useSearchParams();
-
   const contentFetch = new ContentFetch();
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<SearchingProps>({

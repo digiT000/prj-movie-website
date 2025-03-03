@@ -1,12 +1,11 @@
 "use client";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { motion } from "motion/react";
 import { CircleChevronLeft } from "lucide-react";
 import { navLinks } from "@/utils/navigation";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSession } from "next-auth/react";
 import UserProfile from "./UserProfile";
 
 export default function SideBar() {

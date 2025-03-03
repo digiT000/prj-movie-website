@@ -10,7 +10,7 @@ export interface MovieProps {
   title: string;
   year: number;
   poster: string;
-  movieType: string;
+  movieType?: string | undefined;
 }
 
 // ✅ Correct syntax: Using `extends` to inherit properties from `MovieProps`
