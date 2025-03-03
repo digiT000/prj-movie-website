@@ -19,7 +19,7 @@ export default function ItemsListSection({
   fetchingData,
   type,
 }: ItemListProps) {
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams()!;
   const router = useRouter();
   const page = searchParams.get("page");
 
